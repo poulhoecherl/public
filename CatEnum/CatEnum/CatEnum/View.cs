@@ -80,6 +80,15 @@ namespace CatEnum
         }//END
 
         /// <summary>
+        /// Accessor for the Console
+        /// </summary>
+        /// <param name="thisMsg"></param>
+        /// <param name="thisColor"></param>
+        internal void PrintToConsole(string thisMsg, ConsoleColor thisColor)
+        {
+            printC(thisMsg, thisColor);
+        }
+        /// <summary>
         /// Console Write handler
         /// </summary>
         /// <param name="p"></param>

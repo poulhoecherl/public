@@ -26,7 +26,7 @@ namespace CatEnum
             model = new Catalog();
             catalogData = model.ActiveCatalog;
             view = new View();
-        }
+        }//END
 
         /// <summary>
         /// Execution wrapper
@@ -37,36 +37,50 @@ namespace CatEnum
             view.DisplayMainMenu(model);
 
             // Capture user input
+            int index = -1;
             String input = Console.ReadLine();
             while (input.ToLower() != "q")
             {
-                if (input.Length > 0) // sanity: must type something ...
+                if(Int32.TryParse(input.Trim(), out index) )
                 {
-                    if (input.Substring(0, 1).Any(char.IsDigit)) // sanity: make sure the input is numeric
+                    
+                    if ( checkInputRange(index) )
                     {
-                        String category = GetCategoryForId(Int32.Parse(input.Substring(0, 1)));
-                        view.DisplaySearch(category, SearchForCategoryItems(category));
-                        view.DisplayMainMenu(model);
+                        String category = GetCategoryForId(index);
+                        view.DisplaySearch(category, SearchForCategoryItems(category)); // display search results
+                        view.DisplayMainMenu(model); // dump the menu again for convenince
                     }
-                    else if (input.ToLower() == "c") // list Categories
-                    {
-                        view.DisplayCategories(model.Loaded_CategoriesAsString);
-                    }
-                    else if (input.ToLower() == "m") // display Menu
-                    {
-                        view.DisplayMainMenu(model);
-                    }
-                    else // Error
-                        Console.WriteLine("Enter a valid Numeric value, or 'q' to Quit.");
-
-                    input = Console.ReadLine();
+                    else
+                        view.PrintToConsole("Enter a Numeric value between 1 and 7.", ConsoleColor.Red);
                 }
-
-            }
-
-            view.DisplayQuit();
+                else if (input.ToLower() == "c") // list Categories
+                {
+                    view.DisplayCategories(model.Loaded_CategoriesAsString);
+                }
+                else if (input.ToLower() == "m") // display Menu
+                {
+                    view.DisplayMainMenu(model);
+                }
+                
+                input = Console.ReadLine();
+              }
+            view.DisplayQuit();// Quit banner
         }//END
 
+        /// <summary>
+        /// Check the value is valid
+        /// </summary>
+        /// <param name="Start"></param>
+        /// <param name="End"></param>
+        /// <param name="TestVal"></param>
+        /// <returns></returns>
+        private bool checkInputRange(int TestVal)
+        {
+            // check value in range...
+            bool ValueInRange = Enumerable.Range(1, 7).Contains(TestVal);
+            // return value...
+            return ValueInRange;
+        }//END
       
         /// <summary>
         /// Get the Category for the ID
@@ -81,7 +95,7 @@ namespace CatEnum
 
             //"1\tRunning Shoe\tRunning\r"
             if (lines == null)
-                throw new Exception(String.Format("No Category for ID {0}", Id));
+                view.PrintToConsole(String.Format("No Category for ID {0}", Id), ConsoleColor.Red);
 
             String[] tokens = lines[0].Split('\t');
             return tokens[tokens.Length - 1].TrimEnd('\n');
