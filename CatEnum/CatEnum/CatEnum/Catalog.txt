@@ -1,0 +1,9 @@
+Version	3
+ProductID	ProductName	Category
+1	Running Shoe	Running
+2	Dress Shoe	Dress
+3	Running Shirt	Running
+4	Dress Shirt	Dress
+5	Running Shorts	Running
+6	Dress Shorts	Dress
+7	T-Shirt	Casual
